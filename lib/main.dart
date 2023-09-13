@@ -1,5 +1,6 @@
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -17,7 +18,8 @@ class MyApp extends StatelessWidget {
         title: 'App Palabras',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
+          colorScheme:
+              ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 9, 155, 148)),
         ),
         home: MyHomePage(),
       ),
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+
   void getNext() {
     current = WordPair.random();
     notifyListeners();
@@ -52,7 +55,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     Widget page;
