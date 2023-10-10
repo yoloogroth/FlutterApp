@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'services/auth_service.dart';
 
 class RegistroPage extends StatelessWidget {
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  void logIn(BuildContext context) {
+    Navigator.pushNamed(context, '/');
+  }
 
   void _handleRegistration(BuildContext context) {
     // Aquí puedes implementar la lógica de registro de usuarios.
@@ -16,11 +22,12 @@ class RegistroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var authService = Provider.of<AuthService>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registro'),
-        backgroundColor:
-            Color.fromARGB(255, 9, 155, 148), // Color de la barra de navegación
+        title: Text('Sign up'),
+        backgroundColor: Color.fromARGB(
+            255, 141, 38, 189), // Color de la barra de navegación
         centerTitle: true,
       ),
       body: Padding(
@@ -32,7 +39,7 @@ class RegistroPage extends StatelessWidget {
             TextField(
               controller: _nombreController,
               decoration: InputDecoration(
-                labelText: 'Nombre',
+                labelText: 'Name',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.person),
               ),
@@ -41,7 +48,7 @@ class RegistroPage extends StatelessWidget {
             TextField(
               controller: _emailController,
               decoration: InputDecoration(
-                labelText: 'Correo electrónico',
+                labelText: 'E-mail',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.email),
               ),
@@ -50,7 +57,7 @@ class RegistroPage extends StatelessWidget {
             TextField(
               controller: _passwordController,
               decoration: InputDecoration(
-                labelText: 'Contraseña',
+                labelText: 'Password',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.lock),
               ),
@@ -58,17 +65,51 @@ class RegistroPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => _handleRegistration(context),
-              child: Text(
-                'Registrarse',
-                style:
-                    TextStyle(color: Colors.white), // Color del texto del botón
-              ),
+              onPressed: () async {
+                final email = _emailController.text;
+                final username = _nombreController.text;
+                final password = _passwordController.text;
+
+                final registerOk =
+                    await authService.register(email, username, password);
+
+                print(registerOk);
+              },
               style: ElevatedButton.styleFrom(
-                primary: Color.fromARGB(
-                    255, 9, 155, 148), // Color de fondo del botón
+                primary: Color.fromARGB(255, 187, 99, 190),
+                // Color de fondo del botón
+              ),
+              child: Text(
+                'Sing up',
+                style: TextStyle(
+                    color: Color.fromARGB(
+                        255, 211, 195, 195)), // Color del texto del botón
               ),
             ),
+            SizedBox(height: 10),
+            InkWell(
+              onTap: () {
+                logIn(context);
+              },
+              child: Row(
+                // a member? register now
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Are yoy alredy a member?',
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
+                  const SizedBox(width: 4),
+                  const Text(
+                    'LogIn',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
